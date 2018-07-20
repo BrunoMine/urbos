@@ -126,7 +126,7 @@ end)
 minetest.register_node("urbos:teleportador", {
 	description = "Teleportador de Cidades",
 	tiles = {
-		"default_chest_top.png", -- Cima
+		"default_chest_top.png^urbos_teleportador_cima.png", -- Cima
 		"default_chest_top.png", -- Baixo
 		"default_chest_side.png", -- Direita
 		"default_chest_side.png", -- Esquerda
