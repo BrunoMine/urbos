@@ -126,17 +126,36 @@ end)
 minetest.register_node("urbos:teleportador", {
 	description = "Teleportador de Cidades",
 	tiles = {
-		"default_chest_top.png^urbos_teleportador_cima.png", -- Cima
+		"urbos_teleportador_cima.png", -- Cima
 		"default_chest_top.png", -- Baixo
-		"default_chest_side.png", -- Direita
-		"default_chest_side.png", -- Esquerda
-		"default_chest_side.png", -- Fundo
-		"default_chest_front.png" -- Frente
+		"default_chest_side.png^urbos_teleportador_lado.png", -- Direita
+		"default_chest_side.png^urbos_teleportador_lado.png", -- Esquerda
+		"default_chest_side.png^urbos_teleportador_lado.png", -- Fundo
+		"default_chest_side.png^urbos_teleportador_lado.png" -- Frente
 	},
 	paramtype2 = "facedir",
 	groups = {choppy = 2, oddly_breakable_by_hand = 2},
 	sounds = default.node_sound_wood_defaults(),
 	drop = "",
+	
+	on_construct = function(pos)
+		local meta = minetest.get_meta(pos)
+		meta:set_string("infotext", "Viajar para outra cidade")
+
+		minetest.add_entity({x=pos.x, y=pos.y+0.85, z=pos.z}, "urbos:mapinha")
+		local timer = minetest.get_node_timer(pos)
+		timer:start(0.5)
+	end,
+	
+	on_destruct = function(pos)
+		for _, obj in pairs(minetest.get_objects_inside_radius(pos, 0.9)) do
+			if obj and obj:get_luaentity() and
+					obj:get_luaentity().name == "urbos:mapinha" then
+				obj:remove()
+				break
+			end
+		end
+	end,
 	
 	on_rightclick = function(pos, node, player)
 		exibir_interface_teleportador(player:get_player_name())
@@ -146,6 +165,23 @@ minetest.register_node("urbos:teleportador", {
 	after_destruct = function(pos, oldnode)
 		
 	end,
+})
+
+-- Entidade
+minetest.register_entity("urbos:mapinha", {
+	visual = "sprite",
+	visual_size = {x=0.55, y=0.55},
+	collisionbox = {0},
+	physical = false,
+	textures = {"urbos_mapinha.png"},
+	
+	on_activate = function(self)
+		local pos = self.object:getpos()
+
+		if minetest.get_node({x=pos.x, y=pos.y-1, z=pos.z}).name ~= "urbos:teleportador" then
+			self.object:remove()
+		end
+	end
 })
 
 

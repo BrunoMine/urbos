@@ -63,6 +63,12 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				return
 			end
 			
+			-- Verifica se possui o item ainda
+			if urbos.tror.trocar_plus(player, {"urbos:alvara_cidade 1"}, nil) == false then
+				minetest.chat_send_player(name, "Precisa do alvará para fundar a cidade")
+				return
+			end
+			
 			-- Cria cidade
 			urbos.criar_cidade(player, fields.nome_cidade)
 			
@@ -74,7 +80,7 @@ end)
 -- Alvara
 minetest.register_craftitem("urbos:alvara_cidade", {
 	description = "Alvara para Fundar Cidade",
-	inventory_image = "default_paper.png",
+	inventory_image = "urbos_alvara_cidade.png",
 	stack_max = 1,
 	on_use = function(itemstack, user, pointed_thing)
 		exibir_interface_alvara(user:get_player_name())

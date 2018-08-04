@@ -69,6 +69,18 @@ urbos.criar_cidade = function(player, nome_cidade)
 	end
 	player:setpos(pos_spawn)
 	
+	-- Encontra nodes de teleportador
+	do
+		local nodes = minetest.find_nodes_in_area(
+			{x=minp.x, y=pos_spawn.y-4, z=minp.z}, 
+			{x=maxp.x, y=pos_spawn.y+10, z=maxp.z}, 
+			{"urbos:teleportador"}
+		)
+		for _,p in ipairs(nodes) do
+			minetest.registered_nodes["urbos:teleportador"].on_construct(p)
+		end
+	end
+	
 	-- Registra no banco de dados
 	urbos.nova_cidade(nome_cidade, pos_spawn)
 	

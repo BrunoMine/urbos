@@ -27,6 +27,9 @@ notificar("Carregando scripts...")
 -- Criação do banco de dados
 urbos.bd = dofile(modpath.."/lib/memor.lua")
 
+-- Lib tror
+urbos.tror = dofile(modpath.."/lib/tror.lua")
+
 -- Variaveis personalizaveis
 urbos.var = {}
 
